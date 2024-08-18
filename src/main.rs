@@ -4,7 +4,8 @@ use std::io::prelude::*;
 use std::fs; 
 
 use std::process::Command;
-use std::io::{self, Write};
+
+
 
 
 #[macro_use] extern crate rocket;
@@ -24,21 +25,49 @@ use std::io::{self, Write};
 //     io::stdout().write_all(&res.stdout).unwrap();
 
 // }
-#[get("/cmd/<command>")]
-fn comm(command: &str) -> String {
+
+
+// let mut dir = "./";
+#[get("/cmd/<command>/<args>")]
+fn comm(command: &str, args: &str) -> String {
+    // if command == "cd" {
+    //     dir = dir + args;
+    //     return "moved dir";
+    // } 
+    let arr: Vec<&str> = args.split("+").collect();
     let p1 = Command::new(command)
-        // .current_dir("./to_run")
-        // .args(["run"])
+        .current_dir("./to_run/src")
+        .args(arr)
         .output();
         // .expect("failed to execute process");
     // println!("status: {}", output.unwrap().status);
 
     // let res = output.unwrap()
+    
     let hello = String::from_utf8(p1.unwrap().stdout).unwrap(); //res.stdout;
     return hello;
 
+}
 
+#[get("/cmd/<command>/<args>")]
+fn comm2(command: &str, args: &str) -> String {
+    // if command == "cd" {
+    //     dir = dir + args;
+    //     return "moved dir";
+    // } 
+    let arr: Vec<&str> = args.split("+").collect();
+    let p1 = Command::new(command)
+        .current_dir("./to_run")
+        .args(arr)
+        .output();
+        // .expect("failed to execute process");
+    // println!("status: {}", output.unwrap().status);
+
+    // let res = output.unwrap()
     
+    let hello = String::from_utf8(p1.unwrap().stdout).unwrap(); //res.stdout;
+    return hello;
+
 }
 
 
