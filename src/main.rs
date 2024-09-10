@@ -107,12 +107,17 @@ async fn run_ray(text: &str) -> String {
     fs::write("file.py", lines).await.expect("Can't write");
 
     println!("writing file to disk");
-
-    let p1 = Command::new("../../ray_env/bin/python3").arg("file.py").output();
+    
+    let p1 = Command::new("../ray_env/bin/python3").arg("driver.py").output();
     
     let res = String::from_utf8(p1.unwrap().stdout).unwrap();
     println!("{}", res);
     return res.to_string(); // res.to_string();
+    
+    /*let p1 = Command::new("../ray_env/bin/serve").args(["run", "file:serve_app"]).output();
+    let res = String::from_utf8(p1.unwrap().stdout).unwrap();
+    println!("{}", res);
+    */return res.to_string();
 
 }
 
